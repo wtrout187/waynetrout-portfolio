@@ -1,0 +1,28 @@
+# macOS
+.DS_Store
+
+# Python
+venv/
+.env
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Node / tooling
+node_modules/
+npm-debug.log*
+yarn-error.log
+pnpm-debug.log
+
+# Build outputs
+build/
+dist/
+
+# Editors and IDEs
+.vscode/
+.idea/
+
+# Logs and coverage
+*.log
+coverage/

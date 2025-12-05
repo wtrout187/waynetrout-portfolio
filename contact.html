@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - Wayne Trout</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanta/0.5.24/vanta.birds.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-glow: #00d4ff;
+            --secondary-glow: #0099cc;
+            --accent-glow: #66ffff;
+            --dark-bg: #0a0a0a;
+            --darker-bg: #000000;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --code-green: #00ff88;
+            --code-blue: #0088ff;
+            --code-purple: #8844ff;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+        
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        /* Navigation */
+        .nav-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 10, 10, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+            padding: 1rem 2rem;
+        }
+        
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, var(--primary-glow), var(--accent-glow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary-glow);
+            background: rgba(0, 212, 255, 0.1);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+        
+        /* Hero Section */
+        .hero-section {
+            height: 50vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            margin-top: 80px;
+            overflow: hidden;
+        }
+        
+        .contact-hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('resources/contact-bg.png');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.8;
+            z-index: 1;
+        }
+        
+        .vanta-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            background: linear-gradient(45deg, var(--primary-glow), var(--accent-glow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
+        }
+        
+        /* Contact Methods */
+        .contact-section {
+            padding: 6rem 0;
+            background: var(--dark-bg);
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 3rem;
+            background: linear-gradient(45deg, var(--primary-glow), var(--accent-glow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+        
+        .contact-card {
+            background: rgba(0, 20, 40, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .contact-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-glow), var(--accent-glow));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .contact-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .contact-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.2);
+        }
+        
+        .contact-icon {
+            font-size: 3rem;
+            color: var(--primary-glow);
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+        }
+        
+        .contact-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+        
+        .contact-description {
+            opacity: 0.9;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            color: var(--text-secondary);
+        }
+        
+        .contact-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-glow), var(--secondary-glow));
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .contact-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.5);
+        }
+        
+        /* Contact Form */
+        .contact-form-section {
+            padding: 6rem 0;
+            background: linear-gradient(135deg, var(--dark-bg) 0%, #001122 100%);
+        }
+        
+        .contact-form {
+            background: rgba(0, 20, 40, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 30px;
+            padding: 4rem;
+            max-width: 800px;
+            margin: 3rem auto 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .contact-form::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-glow), var(--accent-glow), var(--code-green));
+        }
+        
+        .form-group {
+            margin-bottom: 2rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--primary-glow);
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-glow);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+            background: rgba(0, 10, 20, 0.8);
+        }
+        
+        .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .form-textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        .form-button {
+            background: linear-gradient(45deg, var(--primary-glow), var(--secondary-glow));
+            color: white;
+            padding: 1rem 3rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+            width: 100%;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .form-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.5);
+        }
+        
+        .form-button:active {
+            transform: translateY(-1px);
+        }
+        
+        /* Availability Section */
+        .availability-section {
+            padding: 6rem 0;
+            background: var(--dark-bg);
+        }
+        
+        .availability-card {
+            background: rgba(0, 20, 40, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 30px;
+            padding: 4rem;
+            text-align: center;
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .availability-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--code-green), var(--primary-glow), var(--accent-glow));
+        }
+        
+        .availability-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(0, 255, 136, 0.2);
+            color: var(--code-green);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .availability-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--code-green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.1); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        
+        .availability-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--primary-glow), var(--accent-glow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .availability-description {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+        }
+        
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .service-item {
+            background: rgba(0, 10, 20, 0.5);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .service-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.1);
+            border-color: rgba(0, 212, 255, 0.3);
+        }
+        
+        .service-icon {
+            font-size: 2.5rem;
+            color: var(--primary-glow);
+            margin-bottom: 1rem;
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+        }
+        
+        .service-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+        
+        .service-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        /* Social Links */
+        .social-section {
+            padding: 6rem 0;
+            background: linear-gradient(135deg, var(--dark-bg) 0%, #001122 100%);
+        }
+        
+        .social-container {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .social-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: var(--primary-glow);
+        }
+        
+        .social-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            line-height: 1.8;
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin: 3rem 0;
+        }
+        
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 70px;
+            height: 70px;
+            background: rgba(0, 212, 255, 0.1);
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            border-radius: 50%;
+            color: var(--primary-glow);
+            text-decoration: none;
+            font-size: 1.8rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .social-link:hover {
+            background: rgba(0, 212, 255, 0.2);
+            color: var(--accent-glow);
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 15px 30px rgba(0, 212, 255, 0.3);
+            border-color: var(--primary-glow);
+        }
+        
+        /* Footer */
+        .holographic-page-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 20%, rgba(0, 243, 255, 0.05) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 80%, rgba(0, 255, 136, 0.05) 0%, transparent 50%);
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        .footer {
+            background: var(--darker-bg);
+            padding: 2rem 0;
+            text-align: center;
+            border-top: 1px solid rgba(0, 212, 255, 0.2);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .contact-form {
+                padding: 2rem;
+            }
+            
+            .availability-card {
+                padding: 2rem;
+            }
+            
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .social-links {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+        
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .slide-in-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            animation: slideInLeft 0.8s ease forwards;
+        }
+        
+        @keyframes slideInLeft {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .slide-in-right {
+            opacity: 0;
+            transform: translateX(50px);
+            animation: slideInRight 0.8s ease forwards;
+        }
+        
+        @keyframes slideInRight {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .glow-pulse {
+            animation: glowPulse 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glowPulse {
+            0% { text-shadow: 0 0 20px rgba(0, 212, 255, 0.5); }
+            100% { text-shadow: 0 0 40px rgba(0, 212, 255, 0.8); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav-container">
+        <div class="nav-content">
+            <div class="logo">
+                <i class="fas fa-code"></i> Wayne Trout
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="about.html" class="nav-link">About</a></li>
+                <li><a href="projects.html" class="nav-link">Projects</a></li>
+                <li><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="contact-hero-bg"></div>
+        <div class="hero-content">
+            <h1 class="hero-title fade-in">Get In Touch</h1>
+        </div>
+    </section>
+
+    <!-- Contact Methods -->
+    <section class="contact-section">
+        <div class="holographic-page-bg"></div>
+        <div class="max-w-6xl mx-auto px-4">
+            <h2 class="section-title fade-in">Connect With Me</h2>
+            <div class="contact-grid">
+                <div class="contact-card fade-in">
+                    <div class="contact-icon glow-pulse">
+                        <i class="fab fa-linkedin"></i>
+                    </div>
+                    <h3 class="contact-title">LinkedIn</h3>
+                    <p class="contact-description">
+                        Connect with me on LinkedIn for professional networking, career opportunities, 
+                        and industry insights in AI and data science. Let's build the future together.
+                    </p>
+                    <a href="https://linkedin.com/in/waynetrout" class="contact-link" target="_blank" rel="noopener noreferrer">
+                        <i class="fas fa-external-link-alt"></i>
+                        Connect on LinkedIn
+                    </a>
+                </div>
+                
+                <div class="contact-card fade-in">
+                    <div class="contact-icon glow-pulse">
+                        <i class="fab fa-github"></i>
+                    </div>
+                    <h3 class="contact-title">GitHub</h3>
+                    <p class="contact-description">
+                        Explore my code repositories, contribute to open source projects, 
+                        and collaborate on innovative AI and data science solutions.
+                    </p>
+                    <a href="https://github.com/wtrout187" class="contact-link" target="_blank" rel="noopener noreferrer">
+                        <i class="fas fa-code"></i>
+                        View My Code
+                    </a>
+                </div>
+                
+                <div class="contact-card fade-in">
+                    <div class="contact-icon glow-pulse">
+                        <i class="fab fa-kaggle"></i>
+                    </div>
+                    <h3 class="contact-title">Kaggle</h3>
+                    <p class="contact-description">
+                        Follow my data science journey, see my competition results, 
+                        and explore my research in AI safety and vulnerability analysis.
+                    </p>
+                    <a href="https://kaggle.com/waynetrout" class="contact-link" target="_blank" rel="noopener noreferrer">
+                        <i class="fas fa-trophy"></i>
+                        View Profile
+                    </a>
+                </div>
+                
+                <div class="contact-card fade-in">
+                    <div class="contact-icon glow-pulse">
+                        <i class="fab fa-instagram"></i>
+                    </div>
+                    <h3 class="contact-title">Instagram</h3>
+                    <p class="contact-description">
+                        Follow my journey as a digital content creator, entrepreneur, and dad. 
+                        Behind-the-scenes looks at tech innovation and family life.
+                    </p>
+                    <a href="https://www.instagram.com/realwaynetrout/" class="contact-link" target="_blank" rel="noopener noreferrer">
+                        <i class="fas fa-camera"></i>
+                        Follow My Journey
+                    </a>
+                </div>
+                
+                <div class="contact-card fade-in">
+                    <div class="contact-icon glow-pulse">
+                        <i class="fab fa-tiktok"></i>
+                    </div>
+                    <h3 class="contact-title">TikTok</h3>
+                    <p class="contact-description">
+                        Quick insights into AI, tech trends, and coding tips. 
+                        Educational content focused on making complex topics accessible.
+                    </p>
+                    <a href="https://www.tiktok.com/@realwaynetrout" class="contact-link" target="_blank" rel="noopener noreferrer">
+                        <i class="fas fa-video"></i>
+                        Watch Content
+                    </a>
+                </div>
+                
+                <div class="contact-card fade-in">
+                    <div class="contact-icon glow-pulse">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <h3 class="contact-title">Email</h3>
+                    <p class="contact-description">
+                        For direct communication, project inquiries, or collaboration opportunities. 
+                        I typically respond within 24 hours.
+                    </p>
+                    <a href="mailto:wayne.trout@ai-leader.com" class="contact-link">
+                        <i class="fas fa-paper-plane"></i>
+                        Send Message
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Form -->
+    <section class="contact-form-section">
+        <div class="max-w-4xl mx-auto px-4">
+            <h2 class="section-title fade-in">Send Me a Message</h2>
+            <form class="contact-form fade-in" id="contactForm">
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="form-group">
+                        <label class="form-label" for="name">Full Name</label>
+                        <input type="text" id="name" name="name" class="form-input" placeholder="Your full name" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="email">Email Address</label>
+                        <input type="email" id="email" name="email" class="form-input" placeholder="your.email@example.com" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="subject">Subject</label>
+                    <input type="text" id="subject" name="subject" class="form-input" placeholder="What's this about?" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="message">Message</label>
+                    <textarea id="message" name="message" class="form-input form-textarea" 
+                        placeholder="Tell me about your project, collaboration ideas, or just say hello! I love discussing AI, data science, and technology innovation." required></textarea>
+                </div>
+                
+                <button type="submit" class="form-button">
+                    <i class="fas fa-paper-plane"></i>
+                    Send Message
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Availability -->
+    <section class="availability-section">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="availability-card fade-in">
+                <div class="availability-status">
+                    <div class="availability-dot"></div>
+                    Available for New Projects
+                </div>
+                <h2 class="availability-title">Let's Collaborate</h2>
+                <p class="availability-description">
+                    I'm currently open to new opportunities in AI, data science, and technology leadership. 
+                    Whether you're looking for consultation, collaboration, or full-scale project development, 
+                    I'd love to discuss how we can work together to build something amazing.
+                </p>
+                
+                <div class="services-grid">
+                    <div class="service-item">
+                        <div class="service-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h3 class="service-title">AI Consulting</h3>
+                        <p class="service-description">
+                            Strategic AI implementation, system architecture design, and technology roadmap development 
+                            for enterprises looking to leverage artificial intelligence.
+                        </p>
+                    </div>
+                    
+                    <div class="service-item">
+                        <div class="service-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3 class="service-title">Data Science</h3>
+                        <p class="service-description">
+                            Advanced analytics, predictive modeling, and machine learning solutions 
+                            to transform your data into actionable business intelligence.
+                        </p>
+                    </div>
+                    
+                    <div class="service-item">
+                        <div class="service-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3 class="service-title">Leadership</h3>
+                        <p class="service-description">
+                            Technology team leadership, agile transformation, and strategic planning 
+                            to drive innovation and operational excellence.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Links -->
+    <section class="social-section">
+        <div class="social-container">
+            <h2 class="section-title fade-in">Follow My Journey</h2>
+            <p class="social-description fade-in">
+                Stay connected across all platforms for the latest updates on AI research, 
+                project developments, and insights into the future of technology.
+            </p>
+            
+            <div class="social-links">
+                <a href="https://linkedin.com/in/waynetrout" class="social-link" target="_blank" rel="noopener noreferrer" title="LinkedIn">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+                <a href="https://github.com/wtrout187" class="social-link" target="_blank" rel="noopener noreferrer" title="GitHub">
+                    <i class="fab fa-github"></i>
+                </a>
+                <a href="https://kaggle.com/waynetrout" class="social-link" target="_blank" rel="noopener noreferrer" title="Kaggle">
+                    <i class="fab fa-kaggle"></i>
+                </a>
+                <a href="https://www.instagram.com/realwaynetrout/" class="social-link" target="_blank" rel="noopener noreferrer" title="Instagram">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="https://www.tiktok.com/@realwaynetrout" class="social-link" target="_blank" rel="noopener noreferrer" title="TikTok">
+                    <i class="fab fa-tiktok"></i>
+                </a>
+                <a href="mailto:wayne.trout@ai-leader.com" class="social-link" title="Email">
+                    <i class="fas fa-envelope"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="max-w-6xl mx-auto px-4">
+            <p>&copy; 2025 Wayne Trout. All rights reserved.</p>
+            <p class="mt-2 opacity-60">
+                <i class="fas fa-code"></i> Built with passion for AI and data science
+                <i class="fas fa-heart" style="color: #ff4444;"></i>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Vanta.js background
+        VANTA.NET({
+            el: "#vanta-bg",
+            mouseControls: true,
+            touchControls: true,
+            gyroControls: false,
+            minHeight: 200.00,
+            minWidth: 200.00,
+            scale: 1.00,
+            scaleMobile: 1.00,
+            color: 0x00d4ff,
+            backgroundColor: 0x0a0a0a,
+            points: 8.00,
+            maxDistance: 25.00,
+            spacing: 18.00
+        });
+
+        // Contact form handling
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            // Show success message
+            const button = this.querySelector('.form-button');
+            const originalText = button.innerHTML;
+            
+            button.innerHTML = '<i class="fas fa-check"></i> Message Sent Successfully!';
+            button.style.background = 'linear-gradient(45deg, #00ff88, #00cc66)';
+            
+            // Reset form after 3 seconds
+            setTimeout(() => {
+                this.reset();
+                button.innerHTML = originalText;
+                button.style.background = 'linear-gradient(45deg, #00d4ff, #0099cc)';
+            }, 3000);
+        });
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements for animation
+        document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Add hover effects to contact cards
+        document.querySelectorAll('.contact-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-10px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Add hover effects to social links
+        document.querySelectorAll('.social-link').forEach(link => {
+            link.addEventListener('mouseenter', () => {
+                link.style.transform = 'translateY(-5px) scale(1.1)';
+            });
+            
+            link.addEventListener('mouseleave', () => {
+                link.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Dynamic cursor effect for form inputs
+        const formInputs = document.querySelectorAll('.form-input');
+        formInputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                input.style.borderColor = 'var(--primary-glow)';
+                input.style.boxShadow = '0 0 20px rgba(0, 212, 255, 0.2)';
+            });
+            
+            input.addEventListener('blur', () => {
+                input.style.borderColor = 'rgba(0, 212, 255, 0.3)';
+                input.style.boxShadow = 'none';
+            });
+        });
+    </script>
+</body>
+</html>
