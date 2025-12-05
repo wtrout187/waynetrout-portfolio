@@ -51,7 +51,7 @@
         }
 
         .nav-spacer {
-            height: 96px;
+            height: 110px;
         }
         
         .nav-content {
@@ -555,7 +555,7 @@
         /* Responsive Design */
         @media (max-width: 768px) {
             .nav-spacer {
-                height: 80px;
+                height: 90px;
             }
 
             .nav-links {
@@ -745,23 +745,80 @@
                 <div class="architecture-diagram">
                     <div class="diagram-title">Multi-Agent Architecture</div>
                     <div class="diagram-content">
-┌─────────────────────────────────────────────────────────────┐
-│                    CLM Manager (Orchestrator)                │
-└─────────────────────┬───────────────────────────────────────┘
-                      │
-        ┌─────────────┼─────────────┐
-        │             │             │
-┌───────▼───┐   ┌─────▼───┐   ┌─────▼────┐
-│ Metadata  │   │  Risk   │   │ Summary  │
-<div class="diagram-content">
-    Safety Architecture:
-    <ul>
-        <li>Before-model callbacks (PII detection)</li>
-        <li>Before-tool callbacks (policy enforcement)</li>
-        <li>Session memory (department tracking)</li>
-        <li>Audit trail (compliance-ready)</li>
-    </ul>
-</div>
+                        <strong>Orchestrator:</strong> CLM Manager coordinating agents<br>
+                        <strong>Agents:</strong> Metadata extraction, risk analysis, summarization, generation<br>
+                        <strong>Safety:</strong> PII detection, policy enforcement, session memory, audit trail
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Grid -->
+    <section class="projects-section">
+        <div class="max-w-6xl mx-auto px-4">
+            <h2 class="section-title fade-in">More Projects</h2>
+            <div class="projects-grid">
+                <div class="project-card fade-in">
+                    <h3 class="project-title">GenAI Content Studio</h3>
+                    <p class="project-description">Automated content pipeline with style transfer, fact checks, and brand guardrails.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">FastAPI</span>
+                        <span class="tech-tag">LLM</span>
+                        <span class="tech-tag">Vector DB</span>
+                    </div>
+                    <div class="project-links">
+                        <a class="project-link" href="#" aria-disabled="true">Live Demo</a>
+                        <a class="project-link" href="#" aria-disabled="true">Case Study</a>
+                    </div>
+                    <div class="project-metrics">
+                        <div class="metric">
+                            <div class="metric-value">3x</div>
+                            <div class="metric-label">Throughput</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">92%</div>
+                            <div class="metric-label">On-brand</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card fade-in">
+                    <h3 class="project-title">AI Safety Red Team</h3>
+                    <p class="project-description">Automated prompt-injection and jailbreak testing harness with reporting.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">Playwright</span>
+                        <span class="tech-tag">LLM</span>
+                        <span class="tech-tag">Security</span>
+                    </div>
+                    <div class="project-links">
+                        <a class="project-link" href="#" aria-disabled="true">Report</a>
+                        <a class="project-link" href="#" aria-disabled="true">Slides</a>
+                    </div>
+                    <div class="project-metrics">
+                        <div class="metric-value">150+</div>
+                        <div class="metric-label">Tests</div>
+                    </div>
+                </div>
+
+                <div class="project-card fade-in">
+                    <h3 class="project-title">Voice-to-Action Ops</h3>
+                    <p class="project-description">Hands-free field ops assistant with speech-to-text and workflow automation.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Node</span>
+                        <span class="tech-tag">WebRTC</span>
+                        <span class="tech-tag">LLM</span>
+                        <span class="tech-tag">RPA</span>
+                    </div>
+                    <div class="project-links">
+                        <a class="project-link" href="#" aria-disabled="true">Demo</a>
+                        <a class="project-link" href="#" aria-disabled="true">Architecture</a>
+                    </div>
+                    <div class="project-metrics">
+                        <div class="metric-value">45%</div>
+                        <div class="metric-label">Faster Tasks</div>
                     </div>
                 </div>
             </div>

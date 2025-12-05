@@ -48,7 +48,7 @@
         }
 
         .nav-spacer {
-            height: 96px;
+            height: 110px;
         }
         
         .nav-content {
@@ -329,6 +329,17 @@
         .form-button:active {
             transform: translateY(-1px);
         }
+
+        .form-status {
+            margin-top: 1rem;
+            color: var(--code-green);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.95rem;
+        }
+
+        .form-status.error {
+            color: #ff6b6b;
+        }
         
         /* Availability Section */
         .availability-section {
@@ -525,7 +536,7 @@
         /* Responsive Design */
         @media (max-width: 768px) {
             .nav-spacer {
-                height: 80px;
+                height: 90px;
             }
 
             .nav-links {
@@ -762,6 +773,7 @@
                     <i class="fas fa-paper-plane"></i>
                     Send Message
                 </button>
+                <div id="form-status" class="form-status" aria-live="polite"></div>
             </form>
         </div>
     </section>
@@ -880,27 +892,31 @@
             spacing: 18.00
         });
 
-        // Contact form handling
-        document.getElementById('contactForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const formData = new FormData(this);
-            const data = Object.fromEntries(formData);
-            
-            // Show success message
-            const button = this.querySelector('.form-button');
-            const originalText = button.innerHTML;
-            
-            button.innerHTML = '<i class="fas fa-check"></i> Message Sent Successfully!';
-            button.style.background = 'linear-gradient(45deg, #00ff88, #00cc66)';
-            
-            // Reset form after 3 seconds
-            setTimeout(() => {
-                this.reset();
-                button.innerHTML = originalText;
-                button.style.background = 'linear-gradient(45deg, #00d4ff, #0099cc)';
-            }, 3000);
-        });
+        // Contact form handling (mailto so you receive messages on static hosting)
+        const contactForm = document.getElementById('contactForm');
+        const formStatus = document.getElementById('form-status');
+
+        if (contactForm) {
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const name = document.getElementById('name').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const subject = document.getElementById('subject').value.trim();
+                const message = document.getElementById('message').value.trim();
+
+                const mailto = `mailto:troutwayne@gmail.com?subject=${encodeURIComponent(subject || 'Portfolio contact')}&body=${encodeURIComponent(`From: ${name} (${email})\n\n${message}`)}`;
+
+                formStatus.classList.remove('error');
+                formStatus.textContent = 'Opening your email app...';
+
+                window.location.href = mailto;
+
+                setTimeout(() => {
+                    formStatus.textContent = 'If your mail app did not open, email me at troutwayne@gmail.com.';
+                }, 800);
+            });
+        }
 
         // Smooth scrolling
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
