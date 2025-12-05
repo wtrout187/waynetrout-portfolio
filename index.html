@@ -60,7 +60,7 @@
         }
 
         .nav-spacer {
-            height: 100px; /* space below fixed nav */
+            height: 96px; /* space below fixed nav */
         }
         
         .nav-content {
@@ -972,8 +972,14 @@
         
         /* Responsive Design */
         @media (max-width: 768px) {
+            .nav-spacer {
+                height: 80px;
+            }
+
             .nav-links {
-                display: none;
+                display: flex;
+                flex-wrap: wrap;
+                gap: 1rem;
             }
             
             .social-links {

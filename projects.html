@@ -51,7 +51,7 @@
         }
 
         .nav-spacer {
-            height: 100px;
+            height: 96px;
         }
         
         .nav-content {
@@ -554,8 +554,14 @@
         
         /* Responsive Design */
         @media (max-width: 768px) {
+            .nav-spacer {
+                height: 80px;
+            }
+
             .nav-links {
-                display: none;
+                display: flex;
+                flex-wrap: wrap;
+                gap: 1rem;
             }
             
             .showcase-stats {
@@ -568,6 +574,11 @@
             
             .projects-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .stat-number {
+                font-size: 2.2rem;
+                line-height: 1.1;
             }
             
             .analytics-grid {
