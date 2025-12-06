@@ -49,7 +49,7 @@
         }
 
         .nav-spacer {
-            height: 110px;
+            height: 140px;
         }
         
         .nav-content {
@@ -471,7 +471,7 @@
         /* Responsive Design */
         @media (max-width: 768px) {
             .nav-spacer {
-                height: 90px;
+                height: 120px;
             }
 
             .nav-links {
@@ -929,6 +929,19 @@
         if (statsSection) {
             statsObserver.observe(statsSection.parentElement);
         }
-    </script>
-</body>
+    <script>
+        // Keep content clear of the fixed nav by syncing spacer height to nav height
+        const syncNavSpacer = () => {
+            const nav = document.querySelector('.nav-container');
+            const spacer = document.querySelector('.nav-spacer');
+            if (nav && spacer) {
+                const buffer = 12;
+                spacer.style.height = nav.getBoundingClientRect().height + buffer + 'px';
+            }
+        };
+
+        syncNavSpacer();
+        window.addEventListener('resize', syncNavSpacer);
+
+        // Skill distribution chart
 </html>

@@ -48,7 +48,7 @@
         }
 
         .nav-spacer {
-            height: 110px;
+            height: 140px;
         }
         
         .nav-content {
@@ -536,7 +536,7 @@
         /* Responsive Design */
         @media (max-width: 768px) {
             .nav-spacer {
-                height: 90px;
+                height: 120px;
             }
 
             .nav-links {
@@ -875,6 +875,19 @@
     </footer>
 
     <script>
+        // Keep content clear of the fixed nav by syncing spacer height to nav height
+        const syncNavSpacer = () => {
+            const nav = document.querySelector('.nav-container');
+            const spacer = document.querySelector('.nav-spacer');
+            if (nav && spacer) {
+                const buffer = 12;
+                spacer.style.height = nav.getBoundingClientRect().height + buffer + 'px';
+            }
+        };
+
+        syncNavSpacer();
+        window.addEventListener('resize', syncNavSpacer);
+
         // Initialize Vanta.js background
         VANTA.NET({
             el: "#vanta-bg",
@@ -905,16 +918,25 @@
                 const subject = document.getElementById('subject').value.trim();
                 const message = document.getElementById('message').value.trim();
 
-                const mailto = `mailto:troutwayne@gmail.com?subject=${encodeURIComponent(subject || 'Portfolio contact')}&body=${encodeURIComponent(`From: ${name} (${email})\n\n${message}`)}`;
+                const formattedSubject = subject || 'Portfolio contact';
+                const formattedBody = `From: ${name} (${email})\n\n${message}`;
+                const mailto = `mailto:troutwayne@gmail.com?subject=${encodeURIComponent(formattedSubject)}&body=${encodeURIComponent(formattedBody)}`;
+                const gmailLink = `https://mail.google.com/mail/?view=cm&fs=1&to=troutwayne@gmail.com&su=${encodeURIComponent(formattedSubject)}&body=${encodeURIComponent(formattedBody)}`;
 
                 formStatus.classList.remove('error');
-                formStatus.textContent = 'Opening your email app...';
+                formStatus.innerHTML = `Opening your email app... If nothing opens, <a href="${mailto}">tap here</a> or <a href="${gmailLink}" target="_blank" rel="noopener noreferrer">send via Gmail</a>.`;
 
-                window.location.href = mailto;
+                // Try launching the default mail client
+                window.location.assign(mailto);
+
+                // Provide a clipboard fallback with the composed message
+                if (navigator.clipboard && formattedBody) {
+                    navigator.clipboard.writeText(`To: troutwayne@gmail.com\nSubject: ${formattedSubject}\n\n${message}`).catch(() => {});
+                }
 
                 setTimeout(() => {
-                    formStatus.textContent = 'If your mail app did not open, email me at troutwayne@gmail.com.';
-                }, 800);
+                    formStatus.innerHTML = `If your mail app did not open, email me at <a href="mailto:troutwayne@gmail.com">troutwayne@gmail.com</a> or <a href="${gmailLink}" target="_blank" rel="noopener noreferrer">use Gmail</a>.`;
+                }, 1000);
             });
         }
 

@@ -60,7 +60,7 @@
         }
 
         .nav-spacer {
-            height: 110px; /* space below fixed nav */
+            height: 140px; /* fallback space below fixed nav */
         }
         
         .nav-content {
@@ -569,6 +569,7 @@
             color: var(--hologram-blue);
             margin-bottom: 0.2rem;
             text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+            line-height: 1.1;
         }
         
         .metric-label {
@@ -817,6 +818,7 @@
             color: var(--hologram-blue);
             margin-bottom: 0.5rem;
             text-shadow: 0 0 20px rgba(0, 243, 255, 0.7);
+            line-height: 1.1;
         }
         
         .stat-label {
@@ -973,7 +975,7 @@
         /* Responsive Design */
         @media (max-width: 768px) {
             .nav-spacer {
-                height: 90px;
+                height: 120px;
             }
 
             .nav-links {
@@ -1010,6 +1012,15 @@
             
             .showcase-stats {
                 grid-template-columns: repeat(2, 1fr);
+            }
+
+            .stat-card {
+                padding: 1.5rem;
+            }
+
+            .stat-number {
+                font-size: 2.4rem;
+                line-height: 1.05;
             }
         }
         
@@ -1437,6 +1448,19 @@ Safety Architecture:
     </footer>
 
     <script>
+        // Keep content clear of the fixed nav by syncing spacer height to nav height
+        const syncNavSpacer = () => {
+            const nav = document.querySelector('.nav-container');
+            const spacer = document.querySelector('.nav-spacer');
+            if (nav && spacer) {
+                const buffer = 12; // small breathing room
+                spacer.style.height = nav.getBoundingClientRect().height + buffer + 'px';
+            }
+        };
+
+        syncNavSpacer();
+        window.addEventListener('resize', syncNavSpacer);
+
         // Initialize Vanta.js background
         VANTA.NET({
             el: "#vanta-bg",
